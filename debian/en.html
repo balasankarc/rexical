@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DOCUMENTATION.en.rdoc</title>
+</head>
+<body>
+<h1><a name="label-0" id="label-0">REX: Ruby Lex for Racc</a></h1><!-- RDLabel: "REX: Ruby Lex for Racc" -->
+<h2><a name="label-1" id="label-1">About</a></h2><!-- RDLabel: "About" -->
+<pre>Lexical Scanner Generator for Ruby, with Racc.</pre>
+<h2><a name="label-2" id="label-2">Usage</a></h2><!-- RDLabel: "Usage" -->
+<pre>rex [options] grammarfile
+
+-o  --output-file  filename   designated output filename.
+-s  --stub                    append stub main for debug.
+-i  --ignorecase              ignore char case
+-C  --check-only              syntax check only.
+    --independent             independent mode.
+-d  --debug                   print debug information
+-h  --help                    print usage.
+    --version                 print version.
+    --copyright               print copyright.</pre>
+<h2><a name="label-3" id="label-3">Default Output Filename</a></h2><!-- RDLabel: "Default Output Filename" -->
+<pre>It destinate from foo.rex  to foo.rex.rb.
+This name is for a follow description.
+
+  require 'foo.rex' </pre>
+<h2><a name="label-4" id="label-4">Grammar File Format</a></h2><!-- RDLabel: "Grammar File Format" -->
+<pre>A definition is given in order of a header part, a rule part, 
+and the footer part.  One or more sections are included in a rule part.
+As for each section, the head of the sentence starts by the keyword.
+
+Summary:
+
+  [Header Part]
+  "class" Foo
+  ["option"
+    [options] ]
+  ["inner"
+    [methods] ]
+  ["macro"
+    [macro-name  regular-expression] ]
+  "rule"
+    [start-state]  pattern  [actions]
+  "end"
+  [Footer Part]</pre>
+<h3><a name="label-5" id="label-5">Grammar File Example</a></h3><!-- RDLabel: "Grammar File Example" -->
+<pre>class Foo
+macro
+  BLANK         \s+
+  DIGIT         \d+
+rule
+  {BLANK}
+  {DIGIT}       { [:NUMBER, text.to_i] }
+  .             { [text, text] }
+end</pre>
+<h2><a name="label-6" id="label-6">Header Part ( Optional )</a></h2><!-- RDLabel: "Header Part ( Optional )" -->
+<pre>All the contents described before the definition of a rule part are 
+posted to head of the output file.</pre>
+<h2><a name="label-7" id="label-7">Footer Part ( Optional )</a></h2><!-- RDLabel: "Footer Part ( Optional )" -->
+<pre>All the contents described after the definition of a rule part are 
+posted to tail of the output file.</pre>
+<h2><a name="label-8" id="label-8">Rule Part</a></h2><!-- RDLabel: "Rule Part" -->
+<pre>Rule part is from the line which begins from the "class" keyword 
+to the line which begins from the "end" keyword.
+The class name outputted after a keyword "class" is specified.
+If embellished with a module name, it will become a class in a module.
+The class which inherited Racc::Parser is generated.</pre>
+<h3><a name="label-9" id="label-9">Rule Header Example</a></h3><!-- RDLabel: "Rule Header Example" -->
+<pre>class Foo
+class Bar::Foo</pre>
+<h2><a name="label-10" id="label-10">Option Section ( Optional )</a></h2><!-- RDLabel: "Option Section ( Optional )" -->
+<pre>"option" is start keyword.
+
+  "ignorecase"  when pattern match, ignore char case.
+  "stub"        append stub main for debug.
+  "independent" independent mode, for it is not inherited Racc.</pre>
+<h2><a name="label-11" id="label-11">Inner Section ( Optional )</a></h2><!-- RDLabel: "Inner Section ( Optional )" -->
+<pre>"inner" is start keyword.
+The contents defined here are defined by the inside of the class 
+of the generated scanner.</pre>
+<h2><a name="label-12" id="label-12">Macro Section ( Optional )</a></h2><!-- RDLabel: "Macro Section ( Optional )" -->
+<pre>"macro" is start keyword.
+One regular expression is named.
+A blank character (0x20) can be included by escaping by \ .</pre>
+<h3><a name="label-13" id="label-13">Macro Section Example</a></h3><!-- RDLabel: "Macro Section Example" -->
+<pre>DIGIT         \d+
+IDENT         [a-zA-Z_][a-zA-Z0-9_]*
+BLANK         [\ \t]+
+REMIN         \/\*
+REMOUT        \*\/</pre>
+<h2><a name="label-14" id="label-14">Rule Section</a></h2><!-- RDLabel: "Rule Section" -->
+<pre>"rule" is start keyword.
+
+[state]  pattern  [actions]</pre>
+<h3><a name="label-15" id="label-15">state: Start State ( Optional )</a></h3><!-- RDLabel: "state: Start State ( Optional )" -->
+<pre>A start state is expressed with the identifier which prefaces ":".
+When the continuing alphabetic character is a capital letter, 
+it will be in an exclusive start state.
+When it is a small letter, it will be in an inclusive start state.
+Initial value and default value of a start state is nil.</pre>
+<h3><a name="label-16" id="label-16">pattern: String Pattern</a></h3><!-- RDLabel: "pattern: String Pattern" -->
+<pre>The regular expression for specifying a character string.
+The macro definition bundled with { } can be used for description 
+of a regular expression.  A macro definition is used in order to use 
+a regular expression including a blank.</pre>
+<h3><a name="label-17" id="label-17">actions: Processing Actions ( Optional )</a></h3><!-- RDLabel: "actions: Processing Actions ( Optional )" -->
+<pre>Action is performed when a pattern is suited.
+The processing which creates a suitable token is defined.
+The arrangement whose token has the second clause of classification 
+and a value, or nil.
+The following elements can be used in order to create a token.
+
+  lineno    Line number     ( Read Only )
+  text      Matched string  ( Read Only )
+  state     Start state     ( Read/Write )
+
+Action is bundled with { }.  It is the block of Ruby.
+Don't use the function to change the flow of control exceeding a block.
+( return, exit, next, break, ... )
+If action is omitted, the character string which matched will be canceled 
+and will progress to the next scan.</pre>
+<h3><a name="label-18" id="label-18">Rule Part Example</a></h3><!-- RDLabel: "Rule Part Example" -->
+<pre>{REMIN}                 { state = :REM ; [:REM_IN, text] }</pre>
+<dl>
+<dt><a name="label-19" id="label-19">REM  {REMOUT}                { state = nil ; [:REM_OUT, text] }</a></dt><!-- RDLabel: "REM  {REMOUT}                { state = nil ; [:REM_OUT, text] }" -->
+<dt><a name="label-20" id="label-20">REM  (.+)(?={REMOUT})        { [:COMMENT, text] }</a></dt><!-- RDLabel: "REM  (.+)(?={REMOUT})        { [:COMMENT, text] }" -->
+<dd>
+{BLANK}
+-?{DIGIT}               { [:NUMBER, text.to_i] }
+{WORD}                  { [:word, text] }
+.                       { [text, text] }
+</dd>
+</dl>
+<h2><a name="label-21" id="label-21">Comment ( Optional )</a></h2><!-- RDLabel: "Comment ( Optional )" -->
+<pre>From "#" to the end of the line becomes a comment in each line.</pre>
+<h2><a name="label-22" id="label-22">Usage for Generated Class</a></h2><!-- RDLabel: "Usage for Generated Class" -->
+<h3><a name="label-23" id="label-23">scan_setup()</a></h3><!-- RDLabel: "scan_setup()" -->
+<pre>The event for initializing at the time of the execution start of a scanner.
+It is redefined and used.</pre>
+<h3><a name="label-24" id="label-24">scan_str( str )</a></h3><!-- RDLabel: "scan_str( str )" -->
+<pre>Parse the string described by the defined grammar.
+Token is stored in an inside.</pre>
+<h3><a name="label-25" id="label-25">scan_file( filename )</a></h3><!-- RDLabel: "scan_file( filename )" -->
+<pre>Parse the file described by the defined grammar.
+Token is stored in an inside.</pre>
+<h3><a name="label-26" id="label-26">next_token</a></h3><!-- RDLabel: "next_token" -->
+<pre>One token stored in the inside is taken out.
+The last returns nil.</pre>
+<h2><a name="label-27" id="label-27">Notice</a></h2><!-- RDLabel: "Notice" -->
+<pre>This specification is provisional and may be changed without a preliminary 
+announcement.</pre>
+
+</body>
+</html>

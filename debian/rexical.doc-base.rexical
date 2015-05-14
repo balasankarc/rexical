@@ -1,0 +1,10 @@
+Document: rexical
+Title: Rex Manual
+Author: ARIMA Yasuhiro
+Abstract: Rexical is a lexical scanner generator that is used with Racc to generate 
+ Ruby programs.
+Section: Programming/Ruby
+
+Format: HTML
+Index: /usr/share/doc/rexical/en.html
+Files: /usr/share/doc/rexical/*.html
