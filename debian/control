@@ -4,16 +4,19 @@ Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
 Uploaders: Balasankar C <balasankarc@autistici.org>
 Build-Depends: debhelper (>= 7.0.50~), gem2deb, rake
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/rexical.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-ruby-extras/rexical.git;a=summary
-Homepage: FIXME
-Testsuite: autopkgtest
+Homepage: https://github.com/tenderlove/rexical
+Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: all
 
 Package: rexical
 Architecture: all
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
-Description: FIXME
- <insert long description, indented with spaces>
+Description: Lexical scanner generator for Ruby
+ Rexical is a lexical scanner generator that is used with Racc to generate 
+ Ruby programs. Rexical is written in Ruby.
+ .
+ Racc is a LALR(1) parser generator that is also written in Ruby.
