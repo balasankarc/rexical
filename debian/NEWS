@@ -1,0 +1,6 @@
+rexical (1.0.5-2) unstable; urgency=medium
+
+  Change name of binary from rex to rexical. The name rex conflicts with an
+  executable shipped with the package 'rex'
+
+ -- Balasankar C <balasankarc@autistici.org>  Sat, 18 Jul 2015 15:51:08 +0530

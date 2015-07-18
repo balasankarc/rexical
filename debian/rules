@@ -14,4 +14,8 @@
 %:
 	dh $@ --buildsystem=ruby --with ruby
 override_dh_installchangelogs:
-		dh_installchangelogs CHANGELOG.rdoc
+	dh_installchangelogs CHANGELOG.rdoc
+	dh_installchangelogs
+override_dh_install:
+	mv debian/rexical/usr/bin/rex debian/rexical/usr/bin/rexical
+	dh_install
